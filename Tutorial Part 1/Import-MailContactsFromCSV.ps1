@@ -10,37 +10,30 @@
 # - output an error log to help troubleshooting
 # - option to force update of existing contacts
 # - make sure works with EXO as well
+# - Validate that cmdlets are available (verifies EMS/remoting, and RBAC)
 
 $CSVFileName = "Contacts.csv"
 
 If (Test-Path $CSVFileName) {
 
-
     #Import the CSV file
-    # - include logic to handle invalid/missing file name
-
     $csvfile = Import-CSV $CSVFileName
-
+        
     #Loop through CSV file
-
-        ## Validate that cmdlets are available (verifies EMS/remoting, and RBAC)
-        ## Create contact
-        ## Include error handling, write to console and log (results.log)
-
     foreach ($line in $csvfile) {
 
         try {
+            #Create the mail contact    
+            #TODO - log to results.log
             New-MailContact -Name $line.Name -ExternalEmailAddress $line.ExternalEmailAddress -ErrorAction STOP
         }
         catch {
+            #TODO - log to results.log
             Write-Warning "A problem occured trying to create the $($line.Name) contact"
             Write-Warning $_.Exception.Message
         }
 
     }
-
-        ## Write success to log as well (results.log)
-
 }
 else {
 
