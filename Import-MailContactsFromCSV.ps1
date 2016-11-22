@@ -1,5 +1,4 @@
 ﻿#Parameters needed:
-# -OU (optional, no default)
 # -UpdateExisting (optional, default to false)
 
 param (
@@ -11,6 +10,10 @@ param (
     [string]$OU="exchangeserverpro.net/Company/Contacts"
 
 )
+
+$logfile = "results.log"
+
+Get-Date | Out-File $logfile
 
 #RESEARCH
 # - work out field names to map to a CSV template
@@ -24,6 +27,16 @@ param (
 #No longer needed due to script parameter
 #$CSVFileName = "Contacts.csv"
 
+#Check if OU exists
+try {
+    Get-OrganizationalUnit $OU -ErrorAction STOP
+}
+catch {
+    $message = "The OU $OU was not found"
+    $message | Out-File $logfile -Append
+    throw $message
+}
+
 If (Test-Path $CSVFileName) {
 
     #Import the CSV file
@@ -34,20 +47,25 @@ If (Test-Path $CSVFileName) {
 
         try {
             #Create the mail contact    
-            #TODO - log to results.log
-            New-MailContact -Name $line.Name -ExternalEmailAddress $line.ExternalEmailAddress -ErrorAction STOP
+            New-MailContact -Name $line.Name -ExternalEmailAddress $line.ExternalEmailAddress -OrganizationalUnit $OU -ErrorAction STOP
+            "$($line.Name) was created successfully." | Out-File $logfile -Append
         }
         catch {
-            #TODO - log to results.log
-            Write-Warning "A problem occured trying to create the $($line.Name) contact"
+            
+            $message = "A problem occured trying to create the $($line.Name) contact"
+            $message | Out-File $logfile -Append
+            Write-Warning $message
             Write-Warning $_.Exception.Message
+            $_.Exception.Message | Out-File $logfile -Append
         }
 
     }
 }
 else {
 
-    throw "The CSV file $CSVFileName was not found."
+    $message = "The CSV file $CSVFileName was not found."
+    $message | Out-File $logfile -Append
+    throw $message
 
 }
 
