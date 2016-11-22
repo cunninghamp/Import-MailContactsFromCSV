@@ -11,22 +11,40 @@
 # - option to force update of existing contacts
 # - make sure works with EXO as well
 
+$CSVFileName = "Contacts.csv"
 
-#Import the CSV file
-# - include logic to handle invalid/missing file name
+If (Test-Path $CSVFileName) {
 
-$csvfile = Import-CSV .\Contacts.csv
 
-#Loop through CSV file
+    #Import the CSV file
+    # - include logic to handle invalid/missing file name
 
-    ## Validate that cmdlets are available (verifies EMS/remoting, and RBAC)
-    ## Create contact
-    ## Include error handling, write to console and log (results.log)
-    ## Write success to log as well (results.log)
+    $csvfile = Import-CSV $CSVFileName
 
-foreach ($line in $csvfile) {
+    #Loop through CSV file
 
-    New-MailContact -Name $line.Name -ExternalEmailAddress $line.ExternalEmailAddress    
+        ## Validate that cmdlets are available (verifies EMS/remoting, and RBAC)
+        ## Create contact
+        ## Include error handling, write to console and log (results.log)
+
+    foreach ($line in $csvfile) {
+
+        try {
+            New-MailContact -Name $line.Name -ExternalEmailAddress $line.ExternalEmailAddress -ErrorAction STOP
+        }
+        catch {
+            Write-Warning "A problem occured trying to create the $($line.Name) contact"
+            Write-Warning $_.Exception.Message
+        }
+
+    }
+
+        ## Write success to log as well (results.log)
+
+}
+else {
+
+    throw "The CSV file $CSVFileName was not found."
 
 }
 
