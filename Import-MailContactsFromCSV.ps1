@@ -15,9 +15,19 @@
 #Import the CSV file
 # - include logic to handle invalid/missing file name
 
+$csvfile = Import-CSV .\Contacts.csv
+
 #Loop through CSV file
 
     ## Validate that cmdlets are available (verifies EMS/remoting, and RBAC)
     ## Create contact
     ## Include error handling, write to console and log (results.log)
     ## Write success to log as well (results.log)
+
+foreach ($line in $csvfile) {
+
+    New-MailContact -Name $line.Name -ExternalEmailAddress $line.ExternalEmailAddress    
+
+}
+
+
