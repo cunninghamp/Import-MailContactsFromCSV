@@ -1,7 +1,16 @@
 ﻿#Parameters needed:
-# -FileName (optional, default to specific file name)
 # -OU (optional, no default)
 # -UpdateExisting (optional, default to false)
+
+param (
+	
+    [Parameter( Mandatory=$false)]
+    [string]$CSVFileName="Contacts.csv",
+    
+    [Parameter( Mandatory=$false)]
+    [string]$OU="exchangeserverpro.net/Company/Contacts"
+
+)
 
 #RESEARCH
 # - work out field names to map to a CSV template
@@ -12,7 +21,8 @@
 # - make sure works with EXO as well
 # - Validate that cmdlets are available (verifies EMS/remoting, and RBAC)
 
-$CSVFileName = "Contacts.csv"
+#No longer needed due to script parameter
+#$CSVFileName = "Contacts.csv"
 
 If (Test-Path $CSVFileName) {
 
