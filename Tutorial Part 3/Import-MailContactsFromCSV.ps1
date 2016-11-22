@@ -1,44 +1,5 @@
-﻿<#
-.SYNOPSIS
-Import-MailContactsFromCSV.ps1 - Create new mail contacts in Exchange from a CSV file
-
-.DESCRIPTION 
-This PowerShell script will take contact data from a CSV file and create mail contacts
-in Exchange.
-
-.OUTPUTS
-Results are written to a results.log file.
-
-.PARAMETER CSVFileName
-Use this parameter to specify a different CSV file name than the
-default "contacts.csv".
-
-.PARAMETER OU
-Use this parameter to specify an organizational unit for the
-contacts to be created in.
-
-.EXAMPLE
-.\Import-MailContactsFromCSV.ps1 -CSVFileName externalcontractors.csv
-
-.NOTES
-Written by: Paul Cunningham
-
-Find me on:
-
-* My Blog:	http://paulcunningham.me
-* Twitter:	https://twitter.com/paulcunningham
-* LinkedIn:	http://au.linkedin.com/in/cunninghamp/
-* Github:	https://github.com/cunninghamp
-
-For more Exchange Server tips, tricks and news
-check out Exchange Server Pro.
-
-* Website:	http://exchangeserverpro.com
-* Twitter:	http://twitter.com/exchservpro
-
-Change Log
-V1.00, 22/11/2016 - Initial version
-#>
+﻿#Parameters needed:
+# -UpdateExisting (optional, default to false)
 
 param (
 	
@@ -53,6 +14,18 @@ param (
 $logfile = "results.log"
 
 Get-Date | Out-File $logfile
+
+#RESEARCH
+# - work out field names to map to a CSV template
+
+#TODO
+# - output an error log to help troubleshooting
+# - option to force update of existing contacts
+# - make sure works with EXO as well
+# - Validate that cmdlets are available (verifies EMS/remoting, and RBAC)
+
+#No longer needed due to script parameter
+#$CSVFileName = "Contacts.csv"
 
 #Check if OU exists
 try {
