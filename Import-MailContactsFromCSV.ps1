@@ -40,9 +40,6 @@ Change Log
 V1.00, 22/11/2016 - Initial version
 #>
 
-#Parameters needed:
-# -UpdateExisting (optional, default to false)
-
 param (
 	
     [Parameter( Mandatory=$false)]
@@ -56,18 +53,6 @@ param (
 $logfile = "results.log"
 
 Get-Date | Out-File $logfile
-
-#RESEARCH
-# - work out field names to map to a CSV template
-
-#TODO
-# - output an error log to help troubleshooting
-# - option to force update of existing contacts
-# - make sure works with EXO as well
-# - Validate that cmdlets are available (verifies EMS/remoting, and RBAC)
-
-#No longer needed due to script parameter
-#$CSVFileName = "Contacts.csv"
 
 #Check if OU exists
 try {
